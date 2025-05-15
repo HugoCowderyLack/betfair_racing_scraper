@@ -148,5 +148,16 @@ def main():
 
     driver.quit()  # Close the driver
 
+    #collects and formats data into df
+    df['Position'] = df.groupby(['Month','Day','Track','Race']).cumcount() + 1
+    df['Position'] = df['Position'].replace('-', '0')
+    df['Position'] = df['Position'].replace(r'\D', '', regex=True).astype(int)
+    df['Race'] = df['Race'].astype(int)
+    df= df.set_index(['Month','Day','Track','Race'])
+    df.tail(100000)
+
+    #convert to excel file with the given file name
+    df.to_excel('MARCH23.xlsx')
+
 if __name__ == "__main__":
     main()
